@@ -1,0 +1,108 @@
+Description: Registers the latest version of the ProServe::ServiceCatalog::ConcurrentProvisionedProduct CloudFormation Resource
+
+Parameters:
+  SourceBucketName:
+    Type: String
+    Default: aws-enterprise-jumpstart
+  SourceBucketPrefix:
+    Type: String
+    Default: aws-concurrent-provisioned-product/proserve-servicecatalog-concurrentprovisionedproduct-
+  Version:
+    Type: String
+    Default: v1.0.1
+
+Resources:
+  DdbLockTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: concurrent-sc-product-locks
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+      - AttributeName: "sc-product"
+        AttributeType: S
+      KeySchema:
+      - AttributeName: "sc-product"
+        KeyType: HASH
+      SSESpecification:
+        SSEEnabled: True
+  DdbStateTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: concurrent-sc-product-state
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+      - AttributeName: "id"
+        AttributeType: S
+      KeySchema:
+      - AttributeName: "id"
+        KeyType: HASH
+      SSESpecification:
+        SSEEnabled: True
+  CfnLogAndMetricsDeliveryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 43200
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - resources.cloudformation.amazonaws.com
+          Action: sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: LogAndMetricsDeliveryRolePolicy
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:DescribeLogGroups
+            - logs:DescribeLogStreams
+            - logs:PutLogEvents
+            - cloudwatch:ListMetrics
+            - cloudwatch:PutMetricData
+            Resource: "*"
+  CfnResourceProviderExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 8400
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: resources.cloudformation.amazonaws.com
+            Action: sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: ResourceTypePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                - "*"
+                Resource: "*"
+  CfnResourceLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: ProServe-ServiceCatalog-ConcurrentProvisionedProduct
+      RetentionInDays: 30
+  ConcurrentScProductCfnResourceProvider:
+    Type: AWS::CloudFormation::ResourceVersion
+    Properties:
+      ExecutionRoleArn: !GetAtt CfnResourceProviderExecutionRole.Arn
+      SchemaHandlerPackage: !Sub s3://${SourceBucketName}/${SourceBucketPrefix}${Version}.zip
+      TypeName: ProServe::ServiceCatalog::ConcurrentProvisionedProduct
+      LoggingConfig:
+          LogGroupName: !Ref CfnResourceLogGroup
+          LogRoleArn: !GetAtt CfnLogAndMetricsDeliveryRole.Arn
+  CfnResourceProviderDefaultVersion:
+    Type: AWS::CloudFormation::ResourceDefaultVersion
+    Properties:
+      TypeName: ProServe::ServiceCatalog::ConcurrentProvisionedProduct
+      TypeVersionArn: !Ref ConcurrentScProductCfnResourceProvider

@@ -1,0 +1,286 @@
+{
+    "typeName": "ProServe::ServiceCatalog::ConcurrentProvisionedProduct",
+    "description": "Resource Schema for ProServe::ServiceCatalog::ConcurrentProvisionedProduct",
+    "sourceUrl": "https://gitlab.aws.dev/manu-lz/aws-concurrent-provisioned-product.git",
+    "definitions": {
+        "ProvisioningPreferences": {
+            "description": "StackSet preferences that are required for provisioning the product or updating a provisioned product.\n\n",
+            "type": "object",
+            "properties": {
+                "StackSetAccounts": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "insertionOrder": false,
+                    "items" : {
+                        "type" : "string",
+                        "pattern": "^[0-9]{12}$"
+                    }
+                },
+                "StackSetFailureToleranceCount": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "StackSetFailureTolerancePercentage": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "StackSetMaxConcurrencyCount": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "StackSetMaxConcurrencyPercentage": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                },
+                "StackSetOperationType": {
+                    "type": "string",
+                    "enum": [
+                        "CREATE",
+                        "UPDATE",
+                        "DELETE"
+                    ]
+                },
+                "StackSetRegions": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "insertionOrder": false,
+                    "items" : {
+                        "type" : "string",
+                        "pattern": "^[a-z]{2}-([a-z]+-)+[1-9]"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "ProvisioningParameter": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                },
+                "Value": {
+                    "type": "string",
+                    "maxLength": 4096
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "Key",
+                "Value"
+            ]
+        },
+        "Tag": {
+            "type": "object",
+            "properties": {
+                "Key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                },
+                "Value": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 256
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "Key",
+                "Value"
+            ]
+        },
+        "OutputType": {
+            "type": "string"
+        }
+    },
+    "properties": {
+        "RoleArn": {
+            "description": "Role ARN to be assumed in order to launch the product.",
+            "type": "string"
+        },
+        "AcceptLanguage": {
+            "description": "The language code.",
+            "type": "string",
+            "enum": [
+                "en",
+                "jp",
+                "zh"
+            ]
+        },
+        "NotificationArns": {
+            "description": "Passed to AWS CloudFormation. The SNS topic ARNs to which to publish stack-related events.",
+            "type" : "array",
+            "insertionOrder": false,
+            "uniqueItems": true,
+            "items" : {
+                "type" : "string"
+            },
+            "maxItems": 5
+        },
+        "PathId": {
+            "description": "The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use ListLaunchPaths.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "PathName": {
+            "description": "The name of the path. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use ListLaunchPaths.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "ProductId": {
+            "description": "The product identifier.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "ProductName": {
+            "description": "A user-friendly name for the provisioned product. This value must be unique for the AWS account and cannot be updated after the product is provisioned.\n\nEach time a stack is created or updated, if ProductName is provided it will successfully resolve to ProductId as long as only one product exists in the account or Region with that ProductName.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+        },
+        "ProvisionedProductName": {
+            "description": "A user-friendly name for the provisioned product. This value must be unique for the AWS account and cannot be updated after the product is provisioned.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+        },
+        "ProvisioningArtifactId": {
+            "description": "The identifier of the provisioning artifact (also known as a version).",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+        },
+        "ProvisioningArtifactName": {
+            "description": "The name of the provisioning artifact (also known as a version) for the product. This name must be unique for the product.",
+            "type": "string"
+        },
+        "ProvisioningParameters": {
+            "description": "Parameters specified by the administrator that are required for provisioning the product.",
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref" : "#/definitions/ProvisioningParameter"
+            }
+        },
+        "ProvisioningPreferences": {
+            "$ref" : "#/definitions/ProvisioningPreferences"
+        },
+        "Tags": {
+            "description": "One or more tags.",
+            "type": "array",
+            "insertionOrder": false,
+            "items": {
+                "$ref" : "#/definitions/Tag"
+            }
+        },
+        "Id": {
+            "description": "Unique internal identifier, used to properly track state",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50
+        },
+        "ProvisionedProductId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50
+        },
+        "RecordId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50
+        },
+        "OutputKey": {
+            "description": "The output key defines one key of an output of the launched product which should be returned as OutputValue",
+            "type": "string"
+        },
+        "Outputs": {
+            "description": "List of key-value pair outputs.",
+            "type": "object",
+            "patternProperties": {
+                "^[A-Za-z0-9]{1,64}$": {
+                    "$ref": "#/definitions/OutputType"
+                }
+            },
+            "additionalProperties": false,
+            "maxProperties": 100
+        },
+        "OutputValue": {
+            "description": "The output value returned from provisioned product, key defined in OutputKey property",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "ProvisionedProductName"
+    ],
+    "oneOf": [
+        {
+            "required": [
+                "ProductId",
+                "ProvisioningArtifactId"
+            ]
+        },
+        {
+            "required": [
+                "ProductName",
+                "ProvisioningArtifactId"
+            ]
+        },
+        {
+            "required": [
+                "ProductName",
+                "ProvisioningArtifactName"
+            ]
+        },
+        {
+            "required": [
+                "ProductId",
+                "ProvisioningArtifactName"
+            ]
+        }
+    ],
+    "readOnlyProperties": [
+        "/properties/Id",
+        "/properties/ProvisionedProductId",
+        "/properties/Outputs",
+        "/properties/OutputValue"
+    ],
+    "createOnlyProperties": [
+        "/properties/NotificationArns",
+        "/properties/ProvisionedProductName"
+    ],
+    "primaryIdentifier": [
+        "/properties/Id"
+    ],
+    "handlers": {
+        "create": {
+            "permissions": [
+                "*"
+            ],
+            "timeoutInMinutes": 720
+        },
+        "read": {
+            "permissions": [
+                "*"
+            ]
+        },
+        "update": {
+            "permissions": [
+                "*"
+            ],
+            "timeoutInMinutes": 720
+        },
+        "delete": {
+            "permissions": [
+                "*"
+            ]
+        }
+    }
+}

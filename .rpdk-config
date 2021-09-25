@@ -1,0 +1,25 @@
+{
+    "artifact_type": "RESOURCE",
+    "typeName": "ProServe::ServiceCatalog::ConcurrentProvisionedProduct",
+    "language": "java",
+    "runtime": "java8",
+    "entrypoint": "software.amazon.servicecatalog.concurrentprovisionedproduct.HandlerWrapper::handleRequest",
+    "testEntrypoint": "software.amazon.servicecatalog.concurrentprovisionedproduct.HandlerWrapper::testEntrypoint",
+    "settings": {
+        "version": false,
+        "subparser_name": null,
+        "verbose": 0,
+        "force": false,
+        "type_name": null,
+        "artifact_type": null,
+        "namespace": [
+            "software",
+            "amazon",
+            "servicecatalog",
+            "concurrentprovisionedproduct"
+        ],
+        "codegen_template_path": "default",
+        "protocolVersion": "2.0.0"
+    },
+    "executableEntrypoint": "software.amazon.servicecatalog.concurrentprovisionedproduct.HandlerWrapperExecutable"
+}

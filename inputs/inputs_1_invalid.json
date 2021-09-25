@@ -1,0 +1,11 @@
+{
+    "ProvisionedProductName": "CfnTest",
+    "ProductName": "test",
+    "ProvisioningArtifactName": "v1.0.0",
+    "ProvisioningParameters": [
+      {
+        "Key": "MyKey",
+        "Value": "Hallo"
+      }
+    ]
+  }
