@@ -42,11 +42,12 @@ You can use the following link to deploy the CloudFormation resource provider di
 
 ## Future Work
 
-* Check role assumption timeouts
-* Check retry times
-* Check basic permissions
+* Introduce type configurations to allow usage of custom named DynamoDB tables.
 
 ## Hints
+
+* While code samples in this repository has been tested and believe it works well, as always, be sure to test it in your environment before using it in production!
+* Double check the AWS IAM role permissions. In order to follow the least privilege strategy adapt the permissions as required. To use AWS Service Catalog out of the box, the default permissions are widely open.
 
 The RPDK will automatically generate the correct resource model from the schema whenever the project is built via Maven. You can also do this manually with the following command: `cfn generate`.
 
