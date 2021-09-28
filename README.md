@@ -1,4 +1,4 @@
-# Concurrent AWS ServiceCatalog Provisisioned Product Resource Provider
+# Concurrent AWS ServiceCatalog Provisioned Product Resource Provider
 
 This repository implements an AWS CloudFormation Resource Provider,
 which **concurrently** provisions an AWS Service Catalog Product.
