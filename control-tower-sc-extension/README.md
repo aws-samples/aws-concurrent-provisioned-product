@@ -11,6 +11,15 @@ See an example and architecture diagram below. This solution can be integrated i
 
 Hence, the whole process of requesting AWS Accounts can be **highly automated** this way. This setup **reduces lead times and accelerates large scale cloud projects, like mass migrations**.  
 
+## Quickstart
+
+1. Deploy `quickstart/cfn-provider-registration.yaml` AWS Cloudformation stack
+2. Deploy `control-tower-sc-extension/ct-wrapper-quickstart.yaml`
+3. Grant yourself access to `Account Blueprints` AWS Service Catalog portfolio
+4. Grant access to the `AWS Control Tower Account Factory Portfolio` portfolio for AWS IAM Role `sc-concurrent-pp-CfnResourceProviderExecutionRole-*` created through step 1
+5. Note down current provisioning artifact id and product id for `AWS Control Tower Account Factory` product (e.g. `pa-1234566`)
+6. Launch AWS Service Catalog Product `Demo Account Type` with parameters of your choice to initialize a new account provisioning process via Control Tower. The custom resource provide takes care of concurrency.
+
 ## Example Account Template
 
 ```yaml

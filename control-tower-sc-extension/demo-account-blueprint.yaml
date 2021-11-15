@@ -1,0 +1,42 @@
+Description: Ct Wrapper Demo Account
+
+Parameters:
+  AccountName:
+    Type: String
+  AccountEmail:
+    Type: String
+  OrganizationalUnitName:
+    Type: String
+  SSOUserEmail:
+    Type: String
+  SSOUserFirstName:
+    Type: String
+  SSOUserLastName:
+    Type: String
+  ControlTowerAccountFactoryProductId:
+    Type: String
+  ControlTowerAccountFactoryVersionId:
+    Description: Current AWS Service Catalog Provisioning Artifact Id for Control Tower Product
+    Type: String
+
+Resources:
+  Account:
+    Type: ProServe::ServiceCatalog::ConcurrentProvisionedProduct
+    Properties:
+      ProvisionedProductName: !Ref AccountName
+      ProductId: !Ref ControlTowerAccountFactoryProductId
+      ProvisioningArtifactId: !Ref ControlTowerAccountFactoryVersionId
+      OutputKey: AccountId
+      ProvisioningParameters:
+      - Key: AccountEmail
+        Value: !Ref AccountEmail
+      - Key: AccountName
+        Value: !Ref AccountName
+      - Key: ManagedOrganizationalUnit
+        Value: !Ref OrganizationalUnitName
+      - Key: SSOUserEmail
+        Value: !Ref SSOUserEmail
+      - Key: SSOUserFirstName
+        Value: !Ref SSOUserFirstName
+      - Key: SSOUserLastName
+        Value: !Ref SSOUserLastName

@@ -1,0 +1,47 @@
+Description: Registers the latest version of the ProServe::ServiceCatalog::ConcurrentProvisionedProduct CloudFormation Resource
+
+Resources:
+  BlueprintPortfolio:
+    Type: AWS::ServiceCatalog::Portfolio
+    Properties:
+      Description: AWS Account Blueprints
+      DisplayName: Account Blueprints
+      ProviderName: Demo Corporate
+  Demo:
+    Type: AWS::ServiceCatalog::CloudFormationProduct
+    Properties:
+      Description: AWS Foundation Account
+      Name: Demo Account Type
+      Owner: Demo Corporate
+      ProvisioningArtifactParameters:
+      - Name: DEMO
+        Description: Initial Version
+        Info:
+          LoadTemplateFromURL: https://aws-enterprise-jumpstart.s3.eu-west-1.amazonaws.com/aws-concurrent-provisioned-product/demo-account-blueprint.yaml
+  DemoPortfolioAssociation:
+    Type: AWS::ServiceCatalog::PortfolioProductAssociation
+    Properties:
+      PortfolioId: !Ref BlueprintPortfolio
+      ProductId: !Ref Demo
+  DemoLaunchConstraint:
+    DependsOn: DemoPortfolioAssociation
+    Type: AWS::ServiceCatalog::LaunchRoleConstraint
+    Properties:
+      Description: Demo Account Launch Constraint
+      PortfolioId: !Ref BlueprintPortfolio
+      ProductId: !Ref Demo
+      RoleArn: !GetAtt ServiceCatalogLaunchRole.Arn
+  ServiceCatalogLaunchRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: 'sc-launch'
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/AdministratorAccess
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: servicecatalog.amazonaws.com
+          Action:
+          - sts:AssumeRole
