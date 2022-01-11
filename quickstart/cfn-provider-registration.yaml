@@ -9,7 +9,7 @@ Parameters:
     Default: aws-concurrent-provisioned-product/proserve-servicecatalog-concurrentprovisionedproduct-
   Version:
     Type: String
-    Default: v1.1.0
+    Default: v1.1.1
 
 Resources:
   DdbLockTable:
