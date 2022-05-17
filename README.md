@@ -1,3 +1,5 @@
+**repository _moved_, maintained elsewhere -> https://github.com/curlim/aws-concurrent-provisioned-product**
+
 # Concurrent AWS ServiceCatalog Provisioned Product Resource Provider
 
 This repository implements an AWS CloudFormation Resource Provider,
